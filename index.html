@@ -1,12 +1,772 @@
 <!DOCTYPE html>
-<html>
-<head><title>ASMIT Portfolio</title></head>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASMIT Portfolio</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#000;color:#fff;font-family:'Rajdhani',sans-serif;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+
+:root{--red:#ff0015;--line:rgba(255,0,21,.85)}
+
+.site-scale{
+  width:1440px;
+  min-height:100vh;
+  transform-origin:top left;
+  background:#020202;
+  overflow:hidden;
+}
+
+body::before{
+content:"";position:fixed;inset:0;z-index:-3;
+background:
+radial-gradient(circle at 65% 8%,rgba(255,0,21,.45),transparent 28%),
+radial-gradient(circle at 75% 45%,rgba(255,0,21,.25),transparent 35%),
+linear-gradient(180deg,#030303,#000);
+}
+
+.navbar{
+position:fixed;
+top:0;
+left:0;
+width:1440px;
+height:90px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 45px;
+background:rgba(0,0,0,.22);
+backdrop-filter:blur(16px);
+border-bottom:1px solid rgba(255,0,21,.18);
+z-index:999;
+transition:.35s;
+}
+
+.logo{
+font-size:42px;
+font-weight:700;
+letter-spacing:4px;
+text-shadow:0 0 18px rgba(255,0,21,.4);
+}
+
+.logo span{
+color:var(--red);
+}
+
+.logo small{
+display:block;
+margin-top:8px;
+font-size:12px;
+letter-spacing:2px;
+color:#8d8d8d;
+}
+
+.nav-links{
+display:flex;
+gap:34px;
+}
+
+.nav-links a{
+font-size:15px;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:1px;
+transition:.3s;
+position:relative;
+}
+
+.nav-links a:hover{
+color:var(--red);
+}
+
+.nav-links a::after{
+content:"";
+position:absolute;
+left:0;
+bottom:-14px;
+width:0%;
+height:2px;
+background:var(--red);
+transition:.35s;
+}
+
+.nav-links a:hover::after,
+.nav-links .active::after{
+width:100%;
+}
+
+.nav-links .active{
+color:var(--red);
+}
+
+.resume{
+height:52px;
+padding:0 26px;
+display:flex;
+align-items:center;
+gap:12px;
+border-radius:8px;
+border:1px solid var(--red);
+background:rgba(255,0,21,.08);
+font-weight:700;
+text-transform:uppercase;
+transition:.3s;
+box-shadow:0 0 25px rgba(255,0,21,.18);
+}
+
+.resume:hover{
+background:var(--red);
+transform:translateY(-2px);
+box-shadow:0 0 35px rgba(255,0,21,.6);
+}
+
+.hero{
+height:100vh;position:relative;padding:115px 40px 40px;
+display:grid;grid-template-columns:90px 1fr 1.15fr 285px;align-items:center;
+overflow:hidden;
+}
+.city{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  opacity:1;
+  background:
+    radial-gradient(circle at 64% 8%, rgba(255,0,21,.48), transparent 24%),
+    radial-gradient(circle at 78% 55%, rgba(255,0,21,.30), transparent 28%),
+    linear-gradient(90deg, rgba(0,0,0,.92) 0%, rgba(0,0,0,.32) 48%, rgba(0,0,0,.88) 100%),
+    url("assets/images/hero-bg.webp") center/cover no-repeat;
+  filter: contrast(1.18) brightness(.72) saturate(1.35);
+}
+
+.city::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,0,21,.07) 0px,
+      rgba(255,0,21,.07) 1px,
+      transparent 1px,
+      transparent 82px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,0,21,.045) 0px,
+      rgba(255,0,21,.045) 1px,
+      transparent 1px,
+      transparent 82px
+    );
+  opacity:.45;
+}
+
+.city::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.15) 45%, rgba(0,0,0,.84) 100%),
+    radial-gradient(circle at 52% 42%, rgba(255,0,21,.18), transparent 30%),
+    radial-gradient(circle at 70% 78%, rgba(255,0,21,.28), transparent 25%);
+}
+  .hero::before{
+  content:"";
+  position:absolute;
+  left:38%;
+  top:6%;
+  width:540px;
+  height:520px;
+  z-index:1;
+  background:
+    radial-gradient(circle, rgba(255,0,21,.35), transparent 60%);
+  filter: blur(55px);
+  opacity:.85;
+  animation:smokePulse 4s ease-in-out infinite alternate;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  right:14%;
+  bottom:4%;
+  width:640px;
+  height:280px;
+  z-index:1;
+  background:
+    radial-gradient(ellipse, rgba(255,0,21,.32), transparent 65%);
+  filter: blur(45px);
+  opacity:.75;
+}
+
+@keyframes smokePulse{
+  from{
+    transform:scale(1);
+    opacity:.65;
+  }
+  to{
+    transform:scale(1.08);
+    opacity:.95;
+  }
+}
+
+.social,.hero-text,.robot-wrap,.status,.scroll{position:relative;z-index:3}
+
+.social{
+  width:72px;
+  height:365px;
+  border:1px solid rgba(255,0,21,.95);
+  border-radius:40px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:34px;
+  background:linear-gradient(180deg,rgba(0,0,0,.78),rgba(35,0,6,.35));
+  box-shadow:
+    0 0 28px rgba(255,0,21,.35),
+    inset 0 0 24px rgba(255,0,21,.08);
+}
+
+.social a{
+  width:42px;
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:29px;
+  color:#fff;
+  border-radius:50%;
+  transition:.28s ease;
+}
+
+.social a:hover{
+  color:var(--red);
+  transform:scale(1.18);
+  background:rgba(255,0,21,.09);
+  filter:drop-shadow(0 0 12px red);
+}
+.hero-text{padding-left:20px}
+.hello{color:var(--red);font-size:27px;font-weight:700;margin-bottom:18px}
+.hero-text h1{font-size:76px;line-height:.92;font-weight:700;letter-spacing:2px}
+.hero-text h1 span{display:block;color:var(--red)}
+.hero-text h2{font-size:31px;margin-top:28px}
+.hero-text h2 span{color:var(--red)}
+.desc{max-width:540px;font-size:20px;line-height:1.6;color:#bdbdbd;margin-top:26px}
+.btns{display:flex;gap:18px;margin-top:40px}
+.btn{
+height:60px;
+padding:0 32px;
+display:flex;
+align-items:center;
+gap:15px;
+border-radius:8px;
+font-size:15px;
+font-weight:700;
+text-transform:uppercase;
+transition:.35s;
+}
+
+.btn.red{
+background:linear-gradient(135deg,#ff0015,#b30010);
+box-shadow:
+0 0 30px rgba(255,0,21,.55),
+inset 0 0 20px rgba(255,255,255,.08);
+}
+
+.btn.red:hover{
+transform:translateY(-3px);
+box-shadow:
+0 0 45px rgba(255,0,21,.8);
+}
+
+.btn.out{
+border:1px solid rgba(255,255,255,.55);
+background:rgba(255,255,255,.03);
+}
+
+.btn.out:hover{
+border-color:var(--red);
+color:var(--red);
+box-shadow:0 0 20px rgba(255,0,21,.35);
+}
+.btn:hover{transform:translateY(-3px)}
+
+.robot-wrap{
+  height:740px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.robot-wrap::before{
+  content:"";
+  position:absolute;
+  width:520px;
+  height:520px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,0,21,.28),transparent 62%);
+  filter:blur(42px);
+  animation:robotAura 3.5s ease-in-out infinite alternate;
+}
+
+.robot-wrap::after{
+  content:"";
+  position:absolute;
+  bottom:115px;
+  width:460px;
+  height:90px;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(255,0,21,.45),transparent 65%);
+  filter:blur(18px);
+}
+
+#robotCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+  position:relative;
+  z-index:2;
+}
+
+@keyframes robotAura{
+  from{opacity:.55;transform:scale(.95)}
+  to{opacity:1;transform:scale(1.08)}
+}
+
+.status{
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+}
+
+.status-card{
+  position:relative;
+  border:1px solid rgba(255,0,21,.95);
+  border-radius:10px;
+  padding:28px;
+  background:
+    linear-gradient(145deg,rgba(0,0,0,.82),rgba(45,0,8,.28));
+  box-shadow:
+    0 0 24px rgba(255,0,21,.2),
+    inset 0 0 32px rgba(255,0,21,.08);
+  overflow:hidden;
+}
+
+.status-card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);
+}
+
+.status-card::after{
+  content:"";
+  position:absolute;
+  right:-70px;
+  top:-70px;
+  width:150px;
+  height:150px;
+  background:radial-gradient(circle,rgba(255,0,21,.23),transparent 65%);
+  filter:blur(10px);
+}
+
+.status-card p{
+  font-size:17px;
+  color:#bcbcbc;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.status-card h3{
+  font-size:30px;
+  color:var(--red);
+  margin:15px 0 18px;
+  line-height:1.05;
+  text-transform:uppercase;
+  text-shadow:0 0 16px rgba(255,0,21,.5);
+}
+
+.status-card ul{
+  border-top:1px solid rgba(255,0,21,.8);
+  padding-top:18px;
+}
+
+.status-card li{
+  list-style:none;
+  margin:16px 0;
+  color:#d6d6d6;
+  font-size:17px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.status-card li::before{
+  content:"";
+  display:inline-block;
+  width:11px;
+  height:11px;
+  background:var(--red);
+  border-radius:50%;
+  margin-right:14px;
+  box-shadow:0 0 14px red;
+}
+
+.status-card .white{
+  font-size:22px;
+  color:#fff;
+  line-height:1.4;
+  text-transform:uppercase;
+}
+.scroll{
+position:absolute;left:42px;bottom:40px;display:flex;align-items:center;gap:16px;color:#bdbdbd;font-weight:700
+}
+.mouse{width:18px;height:42px;border:2px solid var(--red);border-radius:20px;position:relative}
+.mouse::after{content:"";position:absolute;top:8px;left:50%;width:4px;height:9px;background:var(--red);border-radius:5px;transform:translateX(-50%);animation:wheel 1.2s infinite}
+@keyframes wheel{to{top:24px;opacity:0}}
+
+.page{padding:0 22px 30px}
+.top-grid{display:grid;grid-template-columns:1fr .9fr 1.05fr;gap:14px;margin-bottom:20px}
+.panel,.projects-panel,.achievement-panel,.contact{
+border:1px solid var(--line);border-radius:8px;background:rgba(0,0,0,.62);
+padding:22px;box-shadow:inset 0 0 25px rgba(255,0,21,.06)
+}
+.panel{min-height:330px}
+.title{font-size:26px;text-transform:uppercase;margin-bottom:22px}
+.title::after{content:"";display:inline-block;width:45px;height:3px;background:var(--red);margin-left:12px;vertical-align:middle}
+
+.about-box{display:grid;grid-template-columns:170px 1fr;gap:18px}
+.about-box img,.uni-img{width:100%;height:250px;object-fit:cover;filter:grayscale(1)}
+.about-box p{color:#cfcfcf;font-size:16px;line-height:1.65}
+.read{margin-top:20px;border:1px solid var(--red);display:inline-flex;padding:13px 25px;border-radius:5px;text-transform:uppercase;font-weight:700}
+
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.skill{
+height:58px;border:1px solid rgba(255,0,21,.38);display:flex;align-items:center;gap:12px;
+padding:0 14px;border-radius:5px;background:rgba(255,255,255,.02)
+}
+.skill i{color:var(--red);font-size:22px}
+
+.uni{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center}
+.uni h3{color:var(--red);font-size:20px;margin-bottom:25px}
+.uni p{font-size:20px;line-height:1.5;color:#ddd}
+
+.projects-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-top:20px}
+.project-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.project-card{border:1px solid rgba(255,0,21,.65);border-radius:5px;overflow:hidden;background:#050505}
+.project-card img{width:100%;height:150px;object-fit:cover;filter:brightness(.75)}
+.project-card div{padding:14px}
+.project-card h3{font-size:20px}
+.project-card p{font-size:15px;color:#aaa;margin:10px 0 25px}
+.project-card a{color:var(--red);font-weight:700;text-transform:uppercase}
+
+.soon-box{
+height:270px;border:1px dashed rgba(255,0,21,.5);border-radius:7px;
+display:flex;align-items:center;justify-content:center;text-align:center;color:#aaa;font-size:24px
+}
+
+.contact{
+margin-top:20px;display:grid;grid-template-columns:1fr 270px;gap:20px;align-items:center
+}
+.contact-items{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
+.contact-items div{display:flex;align-items:center;gap:14px;font-size:18px;color:#ddd}
+.contact-items i{font-size:30px;color:var(--red)}
+.connect{height:70px;background:var(--red);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;text-transform:uppercase;box-shadow:0 0 35px rgba(255,0,21,.6)}
+footer{text-align:center;color:#aaa;padding:22px}
+
+/* Mobile = desktop scale */
+@media(max-width:1440px){
+  .site-scale{transform:scale(calc(100vw / 1440))}
+  body{
+    width:100vw;
+    min-height:calc(2500px * (100vw / 1440));
+    overflow-x:hidden;
+  }
+}
+</style>
+</head>
+
 <body>
-<h1>ASMIT Portfolio - Coming Soon</h1>
-<p>Robot model loading...</p>
+<div class="site-scale">
+
+<header class="navbar">
+  <div class="logo">PR<span>O</span>XY<small>ROBOTICS ENGINEER</small></div>
+  <nav class="nav-links">
+    <a class="active" href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#achievements">Achievements</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a class="resume" href="#" onclick="alert('Resume will be available soon')">Download Resume <i class="fa-solid fa-download"></i></a>
+</header>
+
+<section class="hero" id="home">
+  <div class="city"></div>
+
+  <aside class="social">
+    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+    <a href="mailto:asmitbera2004@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+    <a href="https://wa.me/77759776455"><i class="fa-brands fa-whatsapp"></i></a>
+    <a href="#"><i class="fa-solid fa-code"></i></a>
+  </aside>
+
+  <div class="hero-text">
+    <div class="hello">HELLO, I'M</div>
+    <h1>ASMIT KUMAR <span>BERA</span></h1>
+    <h2>ROBOTICS & AUTOMATION <span>ENGINEER</span></h2>
+    <p class="desc">I design, build and program intelligent robotic systems that combine mechanics, electronics and software to solve real-world problems and push the boundaries of automation.</p>
+    <div class="btns">
+      <a class="btn red" href="#projects">Explore Projects <i class="fa-solid fa-arrow-right"></i></a>
+      <a class="btn out" href="#contact">Contact Me <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <div class="robot-wrap">
+    <canvas id="robotCanvas"></canvas>
+  </div>
+
+  <aside class="status">
+    <div class="status-card">
+      <p>System Status</p>
+      <h3>Operational</h3>
+      <ul>
+        <li>AI Integrated</li>
+        <li>Sensors Active</li>
+        <li>Motors Online</li>
+        <li>System Ready</li>
+      </ul>
+    </div>
+
+    <div class="status-card">
+      <p>Building</p>
+      <h3>Intelligent Machines</h3>
+      <div class="white">FOR A BETTER FUTURE.</div>
+    </div>
+  </aside>
+
+  <div class="scroll"><span class="mouse"></span> SCROLL DOWN</div>
+</section>
+
+<main class="page">
+  <section class="top-grid">
+    <div class="panel" id="about">
+      <h2 class="title">About Me</h2>
+      <div class="about-box">
+        <img src="assets/images/profile.webp">
+        <div>
+          <p>I'm Asmit Kumar Bera, a Robotics & Automation Engineering student passionate about robotics, automation, AI and embedded systems.</p>
+          <p>I enjoy turning ideas into real-world solutions through code, circuits and creativity.</p>
+          <a class="read">Read More <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="skills">
+      <h2 class="title">Skills</h2>
+      <div class="skills-grid">
+        <div class="skill"><i class="fa-brands fa-python"></i>Python</div>
+        <div class="skill"><i class="fa-solid fa-c"></i>C / C++</div>
+        <div class="skill"><i class="fa-solid fa-infinity"></i>Arduino</div>
+        <div class="skill"><i class="fa-solid fa-microchip"></i>ESP32</div>
+        <div class="skill"><i class="fa-solid fa-code"></i>HTML</div>
+        <div class="skill"><i class="fa-brands fa-css3-alt"></i>CSS</div>
+        <div class="skill"><i class="fa-brands fa-js"></i>JavaScript</div>
+        <div class="skill"><i class="fa-brands fa-linux"></i>Linux</div>
+        <div class="skill"><i class="fa-solid fa-gear"></i>Robotics</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="title">University</h2>
+      <div class="uni">
+        <img class="uni-img" src="assets/images/university.webp">
+        <div>
+          <h3>University Name</h3>
+          <p>B.Tech in Robotics & Automation Engineering</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="projects-row">
+    <div class="projects-panel" id="projects">
+      <h2 class="title">Featured Projects</h2>
+      <div class="project-grid">
+        <div class="project-card"><img src="assets/images/project-placeholder.webp"><div><h3>Project 01</h3><p>Coming Soon</p><a>View Project →</a></div></div>
+        <div class="project-card"><img src="assets/images/project-placeholder.webp"><div><h3>Project 02</h3><p>Coming Soon</p><a>View Project →</a></div></div>
+        <div class="project-card"><img src="assets/images/project-placeholder.webp"><div><h3>Project 03</h3><p>Coming Soon</p><a>View Project →</a></div></div>
+        <div class="project-card"><img src="assets/images/project-placeholder.webp"><div><h3>Project 04</h3><p>Coming Soon</p><a>View Project →</a></div></div>
+      </div>
+    </div>
+
+    <div class="achievement-panel" id="achievements">
+      <h2 class="title">Achievements</h2>
+      <div class="soon-box">Coming Soon</div>
+    </div>
+  </section>
+
+  <section class="projects-row" id="experience">
+    <div class="projects-panel">
+      <h2 class="title">Experience</h2>
+      <div class="soon-box">Experience will be updated soon.</div>
+    </div>
+    <div class="achievement-panel">
+      <h2 class="title">System</h2>
+      <div class="soon-box">Currently Building Portfolio</div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div>
+      <h2 class="title">Contact Me</h2>
+      <div class="contact-items">
+        <div><i class="fa-brands fa-whatsapp"></i> +7 775 977 6455</div>
+        <div><i class="fa-solid fa-envelope"></i> asmitbera2004@gmail.com</div>
+        <div><i class="fa-solid fa-location-dot"></i> West Bengal, India</div>
+        <div><i class="fa-brands fa-linkedin"></i> linkedin.com/in/asmit-kumar-bera</div>
+        <div><i class="fa-solid fa-code"></i> Code Portfolio</div>
+      </div>
+    </div>
+    <a class="connect" href="mailto:asmitbera2004@gmail.com">Let's Connect <i class="fa-solid fa-arrow-right"></i></a>
+  </section>
+</main>
+
+<footer>© 2024 Asmit Kumar Bera | All Rights Reserved ❤</footer>
+
+</div>
+
 <script type="module">
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
-console.log("Three.js loaded!");
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/DRACOLoader.js";
+
+const canvas=document.getElementById("robotCanvas");
+const scene=new THREE.Scene();
+
+const camera=new THREE.PerspectiveCamera(32,canvas.clientWidth/canvas.clientHeight,.1,100);
+camera.position.set(0,1.3,6.2);
+
+const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(canvas.clientWidth,canvas.clientHeight,false);
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.25;
+
+scene.add(new THREE.AmbientLight(0xffffff,1.2));
+
+const white=new THREE.DirectionalLight(0xffffff,3);
+white.position.set(3,5,5);
+scene.add(white);
+
+const red1=new THREE.PointLight(0xff0015,6,14);
+red1.position.set(0,1.2,3.2);
+scene.add(red1);
+
+const red2=new THREE.PointLight(0xff0015,5,12);
+red2.position.set(-3.5,.6,1.5);
+scene.add(red2);
+
+const platform=new THREE.Group()
+platform.position.y=-1.35;
+scene.add(platform);
+
+const mat=new THREE.MeshBasicMaterial({color:0xff0015,transparent:true,opacity:.95});
+for(let i=0;i<6;i++){
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(1.4+i*.19,.018,12,180),mat);
+ ring.rotation.x=Math.PI/2;
+ platform.add(ring);
+}
+
+const disk=new THREE.Mesh(
+ new THREE.CircleGeometry(2.35,96),
+ new THREE.MeshBasicMaterial({color:0x240006,transparent:true,opacity:.48})
+);
+disk.rotation.x=-Math.PI/2;
+platform.add(disk);
+
+let robot = null, mouseX = 0;
+
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/");
+
+const loader = new GLTFLoader();
+loader.setDRACOLoader(dracoLoader);
+
+loader.load(
+  "assets/models/robot.glb",
+  (g) => {
+    robot = g.scene;
+
+    robot.traverse((child) => {
+      if (child.isMesh) {
+        child.frustumCulled = false;
+        child.material.side = THREE.DoubleSide;
+      }
+    });
+
+    const box = new THREE.Box3().setFromObject(robot);
+    const center = new THREE.Vector3();
+    const size = new THREE.Vector3();
+
+    box.getCenter(center);
+    box.getSize(size);
+
+    robot.position.sub(center);
+
+    const maxSize = Math.max(size.x, size.y, size.z);
+    robot.scale.setScalar(4.2 / maxSize);
+
+    robot.position.y = -0.85;
+
+    scene.add(robot);
+  },
+  undefined,
+  (err) => {
+    alert("Robot load error. Check console.");
+    console.error(err);
+  }
+);
+
+window.addEventListener("mousemove",e=>{
+ mouseX=(e.clientX/window.innerWidth-.5)*.45;
+});
+
+function resize(){
+ const w=canvas.clientWidth,h=canvas.clientHeight;
+ camera.aspect=w/h;
+ camera.updateProjectionMatrix();
+ renderer.setSize(w,h,false);
+}
+window.addEventListener("resize",resize);
+resize();
+
+function animate(){
+ requestAnimationFrame(animate);
+ const t=performance.now()*.001;
+ platform.rotation.y+=.012;
+ red1.intensity=5.5+Math.sin(t*2.2)*1.2;
+ if(robot){
+  const swing=Math.sin(t*.65)*.22;
+  robot.rotation.y+=(swing+mouseX-robot.rotation.y)*.035;
+ }
+ renderer.render(scene,camera);
+}
+animate();
 </script>
+
 </body>
 </html>
