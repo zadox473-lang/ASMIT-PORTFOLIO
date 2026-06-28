@@ -652,106 +652,147 @@ footer{text-align:center;color:#aaa;padding:22px}
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
 
-const canvas=document.getElementById("robotCanvas");
-const scene=new THREE.Scene();
+const canvas = document.getElementById("robotCanvas");
 
-// Adjusted camera FOV and position to securely envelope the object matrix
-const camera=new THREE.PerspectiveCamera(38,canvas.clientWidth/canvas.clientHeight,.1,100);
-camera.position.set(0,0.4,2.8);
+const scene = new THREE.Scene();
 
-const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.setSize(canvas.clientWidth,canvas.clientHeight,false);
-renderer.outputColorSpace=THREE.SRGBColorSpace;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.3;
+const camera = new THREE.PerspectiveCamera(
+  35,
+  canvas.clientWidth / canvas.clientHeight,
+  0.1,
+  1000
+);
 
-scene.add(new THREE.AmbientLight(0xffffff,1.6));
+camera.position.set(0, 1.2, 6);
 
-const white=new THREE.DirectionalLight(0xffffff,4);
-white.position.set(3,5,4);
-scene.add(white);
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  alpha: true,
+  antialias: true
+});
 
-const red1=new THREE.PointLight(0xff0015,6,8);
-red1.position.set(0,0.2,1.5);
-scene.add(red1);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.4;
 
-const platform=new THREE.Group()
-platform.position.y=-0.8;
+scene.add(new THREE.AmbientLight(0xffffff, 2.2));
+
+const keyLight = new THREE.DirectionalLight(0xffffff, 4);
+keyLight.position.set(4, 6, 5);
+scene.add(keyLight);
+
+const redFront = new THREE.PointLight(0xff0015, 8, 20);
+redFront.position.set(0, 2, 4);
+scene.add(redFront);
+
+const redSide = new THREE.PointLight(0xff0015, 6, 20);
+redSide.position.set(-4, 1, 2);
+scene.add(redSide);
+
+const platform = new THREE.Group();
+platform.position.y = -1.35;
 scene.add(platform);
 
-const mat=new THREE.MeshBasicMaterial({color:0xff0015,transparent:true,opacity:.95});
-for(let i=0;i<6;i++){
- const ring=new THREE.Mesh(new THREE.TorusGeometry(0.65+i*.09,.007,12,120),mat);
- ring.rotation.x=Math.PI/2;
- platform.add(ring);
+const ringMat = new THREE.MeshBasicMaterial({
+  color: 0xff0015,
+  transparent: true,
+  opacity: 0.95
+});
+
+for (let i = 0; i < 6; i++) {
+  const ring = new THREE.Mesh(
+    new THREE.TorusGeometry(1.25 + i * 0.18, 0.018, 16, 180),
+    ringMat
+  );
+  ring.rotation.x = Math.PI / 2;
+  platform.add(ring);
 }
 
-let robot = null, mouseX = 0;
+let robot = null;
+let mouseX = 0;
+
+const ROBOT_URL = "https://github.com/zadox473-lang/ASMIT-PORTFOLIO/releases/download/v1/robot.glb";
 
 const loader = new GLTFLoader();
+
 loader.load(
-  "assets/models/robot.glb",
-  (g) => {
-    robot = g.scene;
+  ROBOT_URL,
+  (gltf) => {
+    robot = gltf.scene;
+
+    const box = new THREE.Box3().setFromObject(robot);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+
+    robot.position.x -= center.x;
+    robot.position.y -= center.y;
+    robot.position.z -= center.z;
+
+    const maxSize = Math.max(size.x, size.y, size.z);
+    const scale = 3.2 / maxSize;
+    robot.scale.setScalar(scale);
+
+    robot.position.y = -0.15;
 
     robot.traverse((child) => {
       if (child.isMesh) {
-        child.material.side = THREE.DoubleSide;
         child.frustumCulled = false;
+        if (child.material) {
+          child.material.side = THREE.DoubleSide;
+          child.material.needsUpdate = true;
+        }
       }
     });
 
-    // Forced direct bounding box calculation to override large default pivot limits
-    const box = new THREE.Box3().setFromObject(robot);
-    const size = box.getSize(new THREE.Vector3());
-    const center = box.getCenter(new THREE.Vector3());
-    
-    robot.position.x += (robot.position.x - center.x);
-    robot.position.z += (robot.position.z - center.z);
-    robot.position.y = -0.8; // Align perfectly above baseline ring
-    
-    // Scale normalization layer
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const scaleFactor = 1.5 / maxDim;
-    robot.scale.setScalar(scaleFactor);
-
     scene.add(robot);
+    console.log("Robot loaded successfully");
   },
-  undefined,
-  (err) => {
-    console.error("Error rendering standard glb, triggering immediate absolute asset loader structure...", err);
+  (xhr) => {
+    if (xhr.total) {
+      console.log(Math.round((xhr.loaded / xhr.total) * 100) + "% loaded");
+    }
+  },
+  (error) => {
+    console.error("Robot loading failed:", error);
   }
 );
 
-window.addEventListener("mousemove",e=>{
- mouseX=(e.clientX/window.innerWidth-.5)*.35;
+window.addEventListener("mousemove", (e) => {
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 0.45;
 });
 
-function resize(){
- const w=canvas.clientWidth,h=canvas.clientHeight;
- camera.aspect=w/h;
- camera.updateProjectionMatrix();
- renderer.setSize(w,h,false);
+function resize() {
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+  renderer.setSize(width, height, false);
 }
-window.addEventListener("resize",resize);
+
+window.addEventListener("resize", resize);
 resize();
 
-function animate(){
- requestAnimationFrame(animate);
- const t=performance.now()*.001;
- 
- platform.rotation.y+=.008;
- red1.intensity=5.5+Math.sin(t*2)*1.2;
- 
- if(robot){
-  // Only subtle mouse hover reaction - no auto-looping mesh animations
-  robot.rotation.y+=(mouseX-robot.rotation.y)*.05;
- }
- renderer.render(scene,camera);
+function animate() {
+  requestAnimationFrame(animate);
+
+  const t = performance.now() * 0.001;
+
+  platform.rotation.y += 0.01;
+  redFront.intensity = 7 + Math.sin(t * 2.4) * 1.2;
+
+  if (robot) {
+    const swing = Math.sin(t * 0.65) * 0.18;
+    robot.rotation.y += (swing + mouseX - robot.rotation.y) * 0.035;
+  }
+
+  renderer.render(scene, camera);
 }
+
 animate();
-</script>
+  </script>
 
 </body>
 </html>
