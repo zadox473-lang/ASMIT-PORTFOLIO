@@ -535,7 +535,16 @@ footer{text-align:center;color:#aaa;padding:22px}
   </div>
 
   <div class="robot-wrap">
-    <canvas id="robotCanvas"></canvas>
+  <model-viewer
+    src="https://github.com/zadox473-lang/ASMIT-PORTFOLIO/releases/download/v1/robot.glb"
+    auto-rotate
+    camera-controls
+    disable-zoom
+    shadow-intensity="1"
+    exposure="1.4"
+    camera-orbit="0deg 78deg 5m"
+    field-of-view="28deg">
+  </model-viewer>
   </div>
 
   <aside class="status">
@@ -669,130 +678,7 @@ const renderer = new THREE.WebGLRenderer({
   canvas,
   alpha: true,
   antialias: true
-});
 
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.4;
-
-scene.add(new THREE.AmbientLight(0xffffff, 2.2));
-
-const keyLight = new THREE.DirectionalLight(0xffffff, 4);
-keyLight.position.set(4, 6, 5);
-scene.add(keyLight);
-
-const redFront = new THREE.PointLight(0xff0015, 8, 20);
-redFront.position.set(0, 2, 4);
-scene.add(redFront);
-
-const redSide = new THREE.PointLight(0xff0015, 6, 20);
-redSide.position.set(-4, 1, 2);
-scene.add(redSide);
-
-const platform = new THREE.Group();
-platform.position.y = -1.35;
-scene.add(platform);
-
-const ringMat = new THREE.MeshBasicMaterial({
-  color: 0xff0015,
-  transparent: true,
-  opacity: 0.95
-});
-
-for (let i = 0; i < 6; i++) {
-  const ring = new THREE.Mesh(
-    new THREE.TorusGeometry(1.25 + i * 0.18, 0.018, 16, 180),
-    ringMat
-  );
-  ring.rotation.x = Math.PI / 2;
-  platform.add(ring);
-}
-
-let robot = null;
-let mouseX = 0;
-
-const ROBOT_URL = "https://github.com/zadox473-lang/ASMIT-PORTFOLIO/releases/download/v1/robot.glb";
-
-const loader = new GLTFLoader();
-
-loader.load(
-  ROBOT_URL,
-  (gltf) => {
-    robot = gltf.scene;
-
-    const box = new THREE.Box3().setFromObject(robot);
-    const center = box.getCenter(new THREE.Vector3());
-    const size = box.getSize(new THREE.Vector3());
-
-    robot.position.x -= center.x;
-    robot.position.y -= center.y;
-    robot.position.z -= center.z;
-
-    const maxSize = Math.max(size.x, size.y, size.z);
-    const scale = 3.2 / maxSize;
-    robot.scale.setScalar(scale);
-
-    robot.position.y = -0.15;
-
-    robot.traverse((child) => {
-      if (child.isMesh) {
-        child.frustumCulled = false;
-        if (child.material) {
-          child.material.side = THREE.DoubleSide;
-          child.material.needsUpdate = true;
-        }
-      }
-    });
-
-    scene.add(robot);
-    console.log("Robot loaded successfully");
-  },
-  (xhr) => {
-    if (xhr.total) {
-      console.log(Math.round((xhr.loaded / xhr.total) * 100) + "% loaded");
-    }
-  },
-  (error) => {
-    console.error("Robot loading failed:", error);
-  }
-);
-
-window.addEventListener("mousemove", (e) => {
-  mouseX = (e.clientX / window.innerWidth - 0.5) * 0.45;
-});
-
-function resize() {
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
-
-  camera.aspect = width / height;
-  camera.updateProjectionMatrix();
-  renderer.setSize(width, height, false);
-}
-
-window.addEventListener("resize", resize);
-resize();
-
-function animate() {
-  requestAnimationFrame(animate);
-
-  const t = performance.now() * 0.001;
-
-  platform.rotation.y += 0.01;
-  redFront.intensity = 7 + Math.sin(t * 2.4) * 1.2;
-
-  if (robot) {
-    const swing = Math.sin(t * 0.65) * 0.18;
-    robot.rotation.y += (swing + mouseX - robot.rotation.y) * 0.035;
-  }
-
-  renderer.render(scene, camera);
-}
-
-animate();
-  </script>
 
 </body>
 </html>
