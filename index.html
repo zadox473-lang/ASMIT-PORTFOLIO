@@ -105,10 +105,65 @@ body::before{content:"";position:fixed;inset:0;z-index:-3;background:radial-grad
 .connect{height:70px;background:var(--red);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;text-transform:uppercase;box-shadow:0 0 35px rgba(255,0,21,.6)}
 footer{text-align:center;color:#aaa;padding:22px}
 /* FIX 3: purana calc(100vw/1440) media query hata diya, scale ab JS se hota hai (neeche) */
+
+/* ===== ANIMATIONS ===== */
+.navbar{transform-origin:top left}
+.navbar.sc{height:74px;background:rgba(0,0,0,.72)}
+#loader{position:fixed;inset:0;background:#000;z-index:5000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .8s,visibility .8s}
+#loader.off{opacity:0;visibility:hidden}
+.lg{font-size:54px;font-weight:700;letter-spacing:6px;text-shadow:0 0 25px rgba(255,0,21,.6)}.lg span{color:var(--red)}
+.lb{width:240px;height:3px;background:#1a1a1a}
+.lb i{display:block;height:100%;width:0;background:var(--red);box-shadow:0 0 14px red;animation:ld 1.3s ease forwards}
+@keyframes ld{to{width:100%}}
+#loader p{color:#777;letter-spacing:3px;font-size:13px}
+#pb{position:fixed;top:0;left:0;height:3px;width:0;background:var(--red);box-shadow:0 0 12px red;z-index:1001}
+#cg{position:fixed;width:380px;height:380px;border-radius:50%;pointer-events:none;z-index:1;left:-400px;top:-400px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,0,21,.17),transparent 65%);mix-blend-mode:screen}
+#pc{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:.55}
+.hx{opacity:0}
+.ready .hx{opacity:1;animation:hin 1s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:var(--d,0s)}
+@keyframes hin{from{opacity:0;transform:translate(var(--x,0px),var(--y,40px)) scale(var(--s,1))}}
+.rv{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
+.rv.in{opacity:1;transform:none}
+.hero-text h1 span{animation:glowT 3s ease-in-out infinite alternate}
+@keyframes glowT{from{text-shadow:0 0 8px rgba(255,0,21,.3)}to{text-shadow:0 0 34px rgba(255,0,21,.95)}}
+.robot-wrap model-viewer{animation:floaty 6s ease-in-out infinite}
+@keyframes floaty{50%{transform:translateY(-16px)}}
+.social a{animation:floaty2 4s ease-in-out infinite}
+.social a:nth-child(2){animation-delay:.5s}.social a:nth-child(3){animation-delay:1s}.social a:nth-child(4){animation-delay:1.5s}
+@keyframes floaty2{50%{transform:translateY(-5px)}}
+.status-card li::before{animation:dot 2s ease-in-out infinite}
+.status-card li:nth-child(2)::before{animation-delay:.4s}.status-card li:nth-child(3)::before{animation-delay:.8s}.status-card li:nth-child(4)::before{animation-delay:1.2s}
+@keyframes dot{50%{opacity:.25;transform:scale(.7)}}
+.status-card::before{animation:scan 3.5s linear infinite}
+@keyframes scan{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.panel,.projects-panel,.achievement-panel,.contact{position:relative;overflow:hidden;transition:border-color .4s,box-shadow .4s}
+.panel:hover,.projects-panel:hover,.achievement-panel:hover,.contact:hover{border-color:#ff2a40;box-shadow:0 0 32px rgba(255,0,21,.28),inset 0 0 25px rgba(255,0,21,.1)}
+.panel::before{content:"";position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);animation:scan 4.5s linear infinite}
+.title::after{transition:width .5s}.panel:hover .title::after,.projects-panel:hover .title::after{width:90px}
+.skill{transition:.3s}
+.skill:hover{transform:translateY(-5px);border-color:var(--red);background:rgba(255,0,21,.1);box-shadow:0 0 18px rgba(255,0,21,.4)}
+.skill:hover i{animation:wob .6s}
+@keyframes wob{25%{transform:rotate(-14deg) scale(1.2)}75%{transform:rotate(14deg) scale(1.2)}}
+.project-card{transition:transform .35s,box-shadow .35s,border-color .35s}
+.project-card:hover{border-color:var(--red);box-shadow:0 0 30px rgba(255,0,21,.45)}
+.project-card img{transition:transform .7s,filter .7s}
+.project-card:hover img{transform:scale(1.12);filter:brightness(1)}
+.project-card a{display:inline-block;transition:.3s}.project-card a:hover{transform:translateX(6px)}
+.about-box img,.uni-img{transition:filter .6s,transform .6s}
+.about-box img:hover,.uni-img:hover{filter:grayscale(0);transform:scale(1.03)}
+.read{transition:.3s}.read:hover{background:var(--red);box-shadow:0 0 25px rgba(255,0,21,.6)}
+.contact-items div{transition:.3s}.contact-items div:hover{transform:translateX(8px);color:#fff}
+.connect{transition:.3s;animation:cpulse 2.4s ease-in-out infinite}
+.connect:hover{transform:translateY(-4px) scale(1.03)}
+@keyframes cpulse{50%{box-shadow:0 0 55px rgba(255,0,21,.95)}}
+.soon-box{animation:bd 3s ease-in-out infinite alternate}
+@keyframes bd{to{border-color:rgba(255,0,21,.95);color:#fff}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,.hx{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-<div class="site-scale">
+<div id="loader"><div class="lg">PR<span>O</span>XY</div><div class="lb"><i></i></div><p>INITIALIZING SYSTEM...</p></div>
+<div id="pb"></div><div id="cg"></div><canvas id="pc"></canvas>
 <header class="navbar">
 <div class="logo">PR<span>O</span>XY<small>ROBOTICS ENGINEER</small></div>
 <nav class="nav-links">
@@ -122,6 +177,8 @@ footer{text-align:center;color:#aaa;padding:22px}
 </nav>
 <a class="resume" href="#" onclick="alert('Resume will be available soon')">Download Resume <i class="fa-solid fa-download"></i></a>
 </header>
+<div class="site-scale">
+
 
 <section class="hero" id="home">
 <div class="city"></div>
@@ -217,10 +274,10 @@ field-of-view="28deg">
 <div class="projects-panel" id="projects">
 <h2 class="title">Featured Projects</h2>
 <div class="project-grid">
-<div class="project-card"><img src="assets/images/project-placeholder.webp"><div><h3>Project 01</h3><p>Coming Soon</p><a>View Project →</a></div></div>
-<div class="project-card"><img src="assets/images/project-placeholder.webp"><div><h3>Project 02</h3><p>Coming Soon</p><a>View Project →</a></div></div>
-<div class="project-card"><img src="assets/images/project-placeholder.webp"><div><h3>Project 03</h3><p>Coming Soon</p><a>View Project →</a></div></div>
-<div class="project-card"><img src="assets/images/project-placeholder.webp"><div><h3>Project 04</h3><p>Coming Soon</p><a>View Project →</a></div></div>
+<div class="project-card"><img src="assets/images/project-1.webp"><div><h3>Project 01</h3><p>Coming Soon</p><a>View Project →</a></div></div>
+<div class="project-card"><img src="assets/images/project-2.webp"><div><h3>Project 02</h3><p>Coming Soon</p><a>View Project →</a></div></div>
+<div class="project-card"><img src="assets/images/project-3.webp"><div><h3>Project 03</h3><p>Coming Soon</p><a>View Project →</a></div></div>
+<div class="project-card"><img src="assets/images/project-4.webp"><div><h3>Project 04</h3><p>Coming Soon</p><a>View Project →</a></div></div>
 </div>
 </div>
 <div class="achievement-panel" id="achievements">
@@ -259,15 +316,52 @@ field-of-view="28deg">
 
 <!-- FIX 5: adhoora Three.js script hata diya; uski jagah ye chhota scale script -->
 <script>
-function fit(){
-  var el=document.querySelector('.site-scale');
-  var s=window.innerWidth/1440;
-  el.style.transform='scale('+s+')';
-  document.body.style.height=(el.offsetHeight*s)+'px';
-}
-window.addEventListener('load',fit);
-window.addEventListener('resize',fit);
-fit();
+(function(){
+var $=function(q){return Array.prototype.slice.call(document.querySelectorAll(q))};
+var scaleEl=$('.site-scale')[0],nav=$('.navbar')[0];
+function fit(){var k=window.innerWidth/1440;scaleEl.style.transform='scale('+k+')';nav.style.transform='scale('+k+')';document.body.style.height=(scaleEl.offsetHeight*k)+'px'}
+window.addEventListener('load',fit);window.addEventListener('resize',fit);fit();
+
+// hero entrance
+function hx(sel,d,x,y,s){$(sel).forEach(function(e,i){e.classList.add('hx');e.style.setProperty('--d',(d+i*.1)+'s');if(x!=null)e.style.setProperty('--x',x+'px');if(y!=null)e.style.setProperty('--y',y+'px');if(s)e.style.setProperty('--s',s)})}
+hx('.social',0,-80,0);hx('.hello',.1);hx('.hero-text h1',.2);hx('.hero-text h2',.35);hx('.desc',.5);hx('.btn',.65);
+hx('.robot-wrap',.3,0,0,.8);hx('.status-card',.5,80,0);hx('.scroll',1);
+
+// scroll reveal
+function rv(sel,step,base){$(sel).forEach(function(e,i){e.classList.add('rv');e.style.setProperty('--d',(base||0)+(i%8)*step+'s')})}
+rv('.panel',.12);rv('.projects-panel',.1);rv('.achievement-panel',.2);rv('.project-card',.12,.2);rv('.skill',.06,.1);rv('.contact',0);rv('.contact-items div',.1,.2);
+var io=new IntersectionObserver(function(es){es.forEach(function(en){if(!en.isIntersecting)return;var e=en.target;e.classList.add('in');io.unobserve(e);
+ setTimeout(function(){e.classList.remove('rv','in')},2300)})},{threshold:.12});
+$('.rv').forEach(function(e){io.observe(e)});
+
+// loader
+function go(){document.body.classList.add('ready');$('#loader')[0].classList.add('off')}
+var done=false;function once(){if(!done){done=true;go()}}
+window.addEventListener('load',function(){setTimeout(once,1400)});setTimeout(once,4000);
+
+// progress bar, navbar, active link
+var ids=['home','about','skills','projects','experience','achievements','contact'],links=$('.nav-links a');
+function onS(){var st=window.scrollY,mx=document.documentElement.scrollHeight-window.innerHeight;
+ $('#pb')[0].style.width=(mx>0?st/mx*100:0)+'%';nav.classList.toggle('sc',st>40);
+ var cur=0;ids.forEach(function(id,i){var el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<window.innerHeight*.4)cur=i});
+ links.forEach(function(a,i){a.classList.toggle('active',i===cur)})}
+window.addEventListener('scroll',onS,{passive:true});onS();
+
+// cursor glow + 3D tilt
+var cg=$('#cg')[0];
+window.addEventListener('pointermove',function(e){cg.style.left=e.clientX+'px';cg.style.top=e.clientY+'px'});
+$('.status-card,.project-card').forEach(function(c){
+ c.addEventListener('pointermove',function(e){var b=c.getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;
+  c.style.transform='perspective(700px) rotateY('+x*10+'deg) rotateX('+(-y*10)+'deg) translateY(-6px)'});
+ c.addEventListener('pointerleave',function(){c.style.transform=''})});
+
+// particles
+var cv=$('#pc')[0],cx=cv.getContext('2d'),P=[],W,H;
+function rs(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight}rs();window.addEventListener('resize',rs);
+for(var i=0;i<55;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+.5,v:Math.random()*.5+.15,a:Math.random()*.6+.2});
+(function draw(){cx.clearRect(0,0,W,H);P.forEach(function(p){p.y-=p.v;p.x+=Math.sin(p.y/60)*.2;if(p.y<-5){p.y=H+5;p.x=Math.random()*W}
+ cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fillStyle='rgba(255,0,21,'+p.a+')';cx.shadowColor='#ff0015';cx.shadowBlur=8;cx.fill()});requestAnimationFrame(draw)})();
+})();
 </script>
 </body>
-</html>
+  </html>
